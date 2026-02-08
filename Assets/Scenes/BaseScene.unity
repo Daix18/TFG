@@ -1422,6 +1422,7 @@ GameObject:
   - component: {fileID: 1978471636260644372}
   - component: {fileID: 5420857362073079960}
   - component: {fileID: 8616685847581527272}
+  - component: {fileID: 8997996946204120671}
   m_Layer: 8
   m_Name: PlayerCapsule
   m_TagString: Player
@@ -1569,6 +1570,20 @@ Transform:
   - {fileID: 5393215580012746993}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8997996946204120671
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8616685847581527268}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 916573b562b25be4fba1fe39ded282d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerCameraRotationX: {fileID: 8997996946204120670}
+  playerCameraRotationY: {fileID: 4135013736829056440}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
