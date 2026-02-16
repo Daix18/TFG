@@ -9,6 +9,7 @@ public struct LogEntry
     public float Time;
     public float CameraRotationX;
     public float CameraRotationY;
+    public string EventType;
 }
 
 
@@ -32,24 +33,17 @@ public class DataLogger : MonoBehaviour
         timer += Time.deltaTime;
         gameTime += Time.deltaTime;
 
-        float CameraRotationX = playerCameraRotationX.transform.eulerAngles.y;
-        float  CameraRotationY = playerCameraRotationY.transform.eulerAngles.x;
-
         if (timer >= sampleInterval)
         {
-            LogEntry entry = new LogEntry();
-            entry.Time = gameTime;
-            entry.CameraRotationX = CameraRotationX;
-            entry.CameraRotationY = CameraRotationY;
-
-            logEntries.Add(entry);
-            timer -= sampleInterval ;
+            logEntries.Add(CreateLogEntry("NONE"));
+            timer -= sampleInterval;
         }
+
     }
 
     void SaveToCSV()
     {
-        string csv = "Time;CameraRotationX;CameraRotationY\n";
+        string csv = "Time;CameraRotationX;CameraRotationY;EventType\n";
         string fileName = "Baseline_" + DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss") + ".csv";
         string filePath = Application.persistentDataPath + "/" + fileName;
         //Write to CSV string
@@ -57,10 +51,29 @@ public class DataLogger : MonoBehaviour
         {
             csv += outputentry.Time.ToString("F3") + ";" + 
                 outputentry.CameraRotationX + ";" + 
-                outputentry.CameraRotationY + "\n";
+                outputentry.CameraRotationY + 
+                "; " + outputentry.EventType + "\n";
         }
         File.WriteAllText(filePath, csv);
         Debug.Log("Data saved to: " + filePath);
+    }
+    public LogEntry CreateLogEntry(string eventName)
+    {
+        LogEntry entry = new LogEntry();
+        float CameraRotationX = playerCameraRotationX.transform.eulerAngles.y;
+        float CameraRotationY = playerCameraRotationY.transform.eulerAngles.x;
+
+        entry.Time = gameTime;
+        entry.CameraRotationX = CameraRotationX;
+        entry.CameraRotationY = CameraRotationY;
+        entry.EventType = eventName;
+
+        return entry;
+    }
+
+    public void RegisterEvent(string eventName)
+    {
+        logEntries.Add(CreateLogEntry(eventName));
     }
 
     private void OnApplicationQuit()
