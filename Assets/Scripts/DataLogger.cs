@@ -10,13 +10,13 @@ public struct LogEntry
     public float CameraRotationX;
     public float CameraRotationY;
     public string EventType;
+    public string Technique;
 }
-
 
 public class DataLogger : MonoBehaviour
 {
     //Timers
-    float sampleInterval = 0.2f;
+    [SerializeField] private float sampleInterval = 0.2f;
     float timer = 0f;
 
     //Data variables
@@ -26,6 +26,15 @@ public class DataLogger : MonoBehaviour
 
     //Variable Logger
     List<LogEntry> logEntries = new List<LogEntry>();
+
+    [SerializeField] private Technique _currentTechnique;
+
+
+    private void Start()
+    {
+        var manager = FindFirstObjectByType<TechniqueManager>();
+        _currentTechnique = manager.SelectedTechnique;
+    }
 
     // Update is called once per frame
     void Update()
@@ -43,8 +52,8 @@ public class DataLogger : MonoBehaviour
 
     void SaveToCSV()
     {
-        string csv = "Time;CameraRotationX;CameraRotationY;EventType\n";
-        string fileName = "Baseline_" + DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss") + ".csv";
+        string csv = "Time;CameraRotationX;CameraRotationY;EventType;Technique\n";
+        string fileName = _currentTechnique.ToString() + "_" + DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss") + ".csv";
         string filePath = Application.persistentDataPath + "/" + fileName;
         //Write to CSV string
         foreach (LogEntry outputentry in logEntries)
@@ -52,7 +61,8 @@ public class DataLogger : MonoBehaviour
             csv += outputentry.Time.ToString("F3") + ";" + 
                 outputentry.CameraRotationX + ";" + 
                 outputentry.CameraRotationY + 
-                "; " + outputentry.EventType + "\n";
+                ";" + outputentry.EventType + 
+                ";" + outputentry.Technique + "\n";
         }
         File.WriteAllText(filePath, csv);
         Debug.Log("Data saved to: " + filePath);
@@ -67,6 +77,7 @@ public class DataLogger : MonoBehaviour
         entry.CameraRotationX = CameraRotationX;
         entry.CameraRotationY = CameraRotationY;
         entry.EventType = eventName;
+        entry.Technique = _currentTechnique.ToString();
 
         return entry;
     }
