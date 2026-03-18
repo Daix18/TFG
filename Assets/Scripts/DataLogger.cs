@@ -9,6 +9,8 @@ public struct LogEntry
     public float Time;
     public float CameraRotationX;
     public float CameraRotationY;
+    public float DeltaCameraX;
+    public float DeltaCameraY;
     public string EventType;
     public string Technique;
 }
@@ -24,6 +26,9 @@ public class DataLogger : MonoBehaviour
     public Transform playerCameraRotationX;
     public Transform playerCameraRotationY;
 
+    float previousCameraRotationX;
+    float previousCameraRotationY;
+
     //Variable Logger
     List<LogEntry> logEntries = new List<LogEntry>();
 
@@ -34,6 +39,8 @@ public class DataLogger : MonoBehaviour
     {
         var manager = FindFirstObjectByType<TechniqueManager>();
         _currentTechnique = manager.SelectedTechnique;
+        previousCameraRotationX = playerCameraRotationX.transform.eulerAngles.y;
+        previousCameraRotationY = playerCameraRotationX.transform.eulerAngles.x;
     }
 
     // Update is called once per frame
@@ -52,7 +59,7 @@ public class DataLogger : MonoBehaviour
 
     void SaveToCSV()
     {
-        string csv = "Time;CameraRotationX;CameraRotationY;EventType;Technique\n";
+        string csv = "Time;CameraRotationX;CameraRotationY;DeltaCameraX;DeltaCameraY;EventType;Technique\n";
         string fileName = _currentTechnique.ToString() + "_" + DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss") + ".csv";
         string filePath = Application.persistentDataPath + "/" + fileName;
         //Write to CSV string
@@ -60,9 +67,11 @@ public class DataLogger : MonoBehaviour
         {
             csv += outputentry.Time.ToString("F3") + ";" + 
                 outputentry.CameraRotationX + ";" + 
-                outputentry.CameraRotationY + 
-                ";" + outputentry.EventType + 
-                ";" + outputentry.Technique + "\n";
+                outputentry.CameraRotationY + ";" +
+                outputentry.DeltaCameraX + ";" +
+                outputentry.DeltaCameraY + ";" + 
+                outputentry.EventType + ";" +
+                outputentry.Technique + "\n";
         }
         File.WriteAllText(filePath, csv);
         Debug.Log("Data saved to: " + filePath);
@@ -73,11 +82,17 @@ public class DataLogger : MonoBehaviour
         float CameraRotationX = playerCameraRotationX.transform.eulerAngles.y;
         float CameraRotationY = playerCameraRotationY.transform.eulerAngles.x;
 
+
         entry.Time = gameTime;
         entry.CameraRotationX = CameraRotationX;
         entry.CameraRotationY = CameraRotationY;
+        entry.DeltaCameraX = Mathf.DeltaAngle(previousCameraRotationX, CameraRotationX);
+        entry.DeltaCameraY = Mathf.DeltaAngle(previousCameraRotationY, CameraRotationY);
         entry.EventType = eventName;
         entry.Technique = _currentTechnique.ToString();
+
+        previousCameraRotationX = CameraRotationX;
+        previousCameraRotationY = CameraRotationY;
 
         return entry;
     }
