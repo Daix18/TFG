@@ -33,7 +33,6 @@ public class LightEvent : MonoBehaviour
     {
         Light.enabled = false;
         hasTriggered = true;
-        FindAnyObjectByType<DataLogger>().RegisterEvent("LIGHT_EVENT");
         yield return new WaitForSeconds(1.5f);
         Light.enabled = true;
     }

@@ -4,6 +4,7 @@ using UnityEngine;
 public class DynamicHorrorSystem : MonoBehaviour
 {
     //Design parameters
+    [Header("DHG Parameters")]
     [SerializeField] private float _evaluationInterval = 2f;
     [SerializeField] private float _cooldownDuration = 6f;
     [SerializeField] private float _baseProbability = 0.1f;
@@ -17,10 +18,15 @@ public class DynamicHorrorSystem : MonoBehaviour
     bool _isInCooldown;
 
     //Horror events
+    [Header("Horror Event References")]
     [SerializeField] private LightEvent _lightEvent;
 
     //DataLogger reference
     private DataLogger _dataLogger;
+
+    [Header("Event Weights")]
+    [SerializeField] private float lightWeight = 0.3f;
+    [SerializeField] private float soundWeight = 0.7f;
 
     private void Start()
     {
@@ -40,6 +46,16 @@ public class DynamicHorrorSystem : MonoBehaviour
         _timeSinceLastEvent += Time.deltaTime;
         _evaluationTimer += Time.deltaTime;
 
+        if (_isInCooldown)
+        {
+            _cooldownTimer += Time.deltaTime;
+            if (_cooldownTimer >= _cooldownDuration)
+            {
+                _isInCooldown = false;
+                _cooldownTimer = 0f;
+            }
+        }
+
         if (_evaluationTimer >= _evaluationInterval)
         {
             Debug.Log("Evaluating horror event trigger...");
@@ -47,24 +63,23 @@ public class DynamicHorrorSystem : MonoBehaviour
             if (!_isInCooldown)
             {
                 float prob = _baseProbability + (_timeSinceLastEvent * _growthFactor);
-                float randomValue = Random.value;
                 prob = Mathf.Clamp(prob, 0f, _maxProbability);
 
-                if (randomValue < prob)
+                if (Random.value < prob)
                 {
-                    _lightEvent.TriggerLightEvent();
-                   _dataLogger.RegisterEvent("LIGHT_EVENT_DHG");
-                    _timeSinceLastEvent = 0f;
+                    float randomEvent = Random.value;
+                    if (randomEvent < lightWeight)
+                    {
+                        _lightEvent.TriggerLightEvent();
+                        _dataLogger.RegisterEvent("LIGHT_EVENT_DHG");
+                    }
+                    else 
+                    {
+                        string soundName = AudioManager.THIS.PlayRandomSound();
+                        _dataLogger.RegisterEvent("SOUND_" + soundName);
+                    }
                     _isInCooldown = true;
-                }
-            }
-            else
-            {
-                _cooldownTimer += Time.deltaTime;
-                if (_cooldownTimer >= _cooldownDuration)
-                {
-                    _isInCooldown = false;
-                    _cooldownTimer = 0f;
+                    _timeSinceLastEvent = 0f;
                 }
             }
         }
