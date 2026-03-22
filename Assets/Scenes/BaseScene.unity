@@ -1067,6 +1067,51 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1444643147
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1444643149}
+  - component: {fileID: 1444643148}
+  m_Layer: 0
+  m_Name: JumpScareManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1444643148
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1444643147}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30cb614d2d8e1034c94c5f30acc1254d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _zombie: {fileID: 4667415738564837128, guid: a6d757587eca08a40b4b3aad3483f2a6, type: 3}
+--- !u!4 &1444643149
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1444643147}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.51, y: 0.50582, z: 12.98749}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1454609496
 GameObject:
   m_ObjectHideFlags: 0
@@ -1367,8 +1412,10 @@ MonoBehaviour:
   _growthFactor: 0.05
   _maxProbability: 0.6
   _lightEvent: {fileID: 759742178}
+  _jumpScareEvent: {fileID: 1444643148}
   lightWeight: 0.3
   soundWeight: 0.7
+  jumpscareWeight: 0.8
 --- !u!4 &1885359635
 Transform:
   m_ObjectHideFlags: 0
@@ -1803,7 +1850,7 @@ Transform:
   m_GameObject: {fileID: 8616685847581527268}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.7059649, y: 0.00000023841858, z: 8.59}
+  m_LocalPosition: {x: -1.7059649, y: 0.00000023841858, z: 5.13}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1845,3 +1892,4 @@ SceneRoots:
   - {fileID: 1885359635}
   - {fileID: 1170056607}
   - {fileID: 2078027307}
+  - {fileID: 1444643149}

@@ -20,6 +20,7 @@ public class DynamicHorrorSystem : MonoBehaviour
     //Horror events
     [Header("Horror Event References")]
     [SerializeField] private LightEvent _lightEvent;
+    [SerializeField] private JumpScare _jumpScareEvent;
 
     //DataLogger reference
     private DataLogger _dataLogger;
@@ -27,6 +28,7 @@ public class DynamicHorrorSystem : MonoBehaviour
     [Header("Event Weights")]
     [SerializeField] private float lightWeight = 0.3f;
     [SerializeField] private float soundWeight = 0.7f;
+    [SerializeField] private float jumpscareWeight = 0.4f;
 
     private void Start()
     {
@@ -73,7 +75,13 @@ public class DynamicHorrorSystem : MonoBehaviour
                         _lightEvent.TriggerLightEvent();
                         _dataLogger.RegisterEvent("LIGHT_EVENT_DHG");
                     }
-                    else 
+                    else if (randomEvent < jumpscareWeight)
+                    {
+                        Debug.Log("Triggered jumpscare event...");
+                        _jumpScareEvent.TriggerJumpScare();
+                        _dataLogger.RegisterEvent("JUMPSCARE_EVENT_DHG");
+                    }
+                    else
                     {
                         string soundName = AudioManager.THIS.PlayRandomSound();
                         _dataLogger.RegisterEvent("SOUND_" + soundName);

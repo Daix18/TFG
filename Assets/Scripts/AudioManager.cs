@@ -40,6 +40,19 @@ public class AudioManager : MonoBehaviour
         return _sonidos[index].name;
     }
 
+    public string PlaySound(string soundName)
+    {
+        for (int i = 0; i < _sonidos.Length; i++)
+        {
+            if (_sonidos[i].name == soundName)
+            {
+                _soundSource[i].Play();
+                return _sonidos[i].name;
+            }
+        }
+        return null; // Retorna null si no se encuentra el sonido
+    }
+
     void InitializeSoundSources()
     {
         _soundSource = new AudioSource[_sonidos.Length];
