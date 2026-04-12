@@ -1,0 +1,37 @@
+using UnityEngine;
+
+public class BaseLineSystem : MonoBehaviour
+{
+    [SerializeField]  LightEvent _lightEvent;
+    [SerializeField]  DataLogger _dataLogger;
+
+    bool _triggered = false;
+
+    private void Start()
+    {
+        var controller = FindAnyObjectByType<TechniqueManager>();
+
+        if (controller.SelectedTechnique != Technique.Baseline)
+        {
+            enabled = false;
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (_triggered) return;
+
+        if (other.CompareTag("Player"))
+        {
+            _triggered = true;
+
+            Invoke(nameof(TriggerEvent), 1.5f);
+        }
+    }
+
+    void TriggerEvent()
+    {
+        _lightEvent.TriggerLightEvent();
+        _dataLogger.RegisterEvent("BASELINE_EVENT");
+    }
+}

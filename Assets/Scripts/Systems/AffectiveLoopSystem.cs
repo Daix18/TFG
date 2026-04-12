@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class AffectiveLoopSystem : MonoBehaviour
 {
@@ -27,10 +27,21 @@ public class AffectiveLoopSystem : MonoBehaviour
     Transform _playerCamera;
     DataLogger _dataLogger;
 
+    //Jumpscare variables
+    [SerializeField] LightEvent _lightEvent;
+    [SerializeField] JumpScare _jumpscareEvent;
+
     void Start()
     {
         _playerCamera = Camera.main.transform;
         _dataLogger = FindAnyObjectByType<DataLogger>();
+
+        var controller = FindAnyObjectByType<TechniqueManager>();
+
+        if (controller.SelectedTechnique != Technique.AffectiveLoop)
+        {
+            enabled = false;
+        }
     }
 
     void Update()
@@ -45,20 +56,24 @@ public class AffectiveLoopSystem : MonoBehaviour
         float currentX = _playerCamera.eulerAngles.x;
         float currentY = _playerCamera.eulerAngles.y;
 
-        float deltaX = currentX - _lastX;
-        float deltaY = currentY - _lastY;
+        float deltaX = Mathf.DeltaAngle(_lastX, currentX);
+        float deltaY = Mathf.DeltaAngle(_lastY, currentY);
 
-        float movement = Mathf.Sqrt(deltaX * deltaX + deltaY * deltaY);
+        float rawMovement = Mathf.Sqrt(deltaX * deltaX + deltaY * deltaY);
 
-        movement = Mathf.Clamp(movement, 0f, 10f); // Prevent extreme values
+        float movement = rawMovement * 5f;
 
-        _arousal += movement * Time.deltaTime;
+        movement = Mathf.Clamp01(movement);
+
+        _arousal += movement * _arousalIncrease * Time.deltaTime;
         _arousal -= _arousalDecay * Time.deltaTime;
 
         _arousal = Mathf.Clamp(_arousal, 0f, _maxArousal);
 
         _lastX = currentX;
         _lastY = currentY;
+
+        Debug.Log("Camera Movement: " + movement + " | Arousal: " + _arousal);
     }
 
     void HandleCooldown()
@@ -98,7 +113,25 @@ public class AffectiveLoopSystem : MonoBehaviour
 
     void TriggerEvent()
     {
-        // luz / sonido / jumpscare
-        // + DataLogger
+        if (_arousal < 0.3f)
+        {
+            // sonido suave
+            string sound = AudioManager.THIS.PlayRandomSound();
+            _dataLogger.RegisterEvent("AFFECTIVE_SOUND_" + sound);
+        }
+        else if (_arousal < 0.7f)
+        {
+            // evento medio
+            _lightEvent.TriggerLightEvent();
+            _dataLogger.RegisterEvent("AFFECTIVE_LIGHT");
+        }
+        else
+        {
+            _lightEvent.TriggerLightEvent();
+
+            string sound = AudioManager.THIS.PlayRandomSound();
+
+            _dataLogger.RegisterEvent("AFFECTIVE_STRONG_" + sound);
+        }
     }
 }
