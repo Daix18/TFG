@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class LightEvent : MonoBehaviour
 {
-    public Light Light;
+    public Light _light;
     bool hasTriggered;
 
     private void Start()
@@ -20,20 +20,26 @@ public class LightEvent : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            StartCoroutine(LightFlick());
+            StartCoroutine(Flicker(0.5f));
         }
     }
 
-    public void TriggerLightEvent()
+    public void TriggerLightEvent(float intensity)
     {
-        StartCoroutine(LightFlick());
+        StartCoroutine(Flicker(intensity));
     }
 
-    IEnumerator LightFlick()
+    IEnumerator Flicker(float intensity)
     {
-        Light.enabled = false;
-        hasTriggered = true;
-        yield return new WaitForSeconds(1.5f);
-        Light.enabled = true;
+        int flickers = Mathf.RoundToInt(Mathf.Lerp(2, 10, intensity));
+        float speed = Mathf.Lerp(0.2f, 0.05f, intensity);
+
+        for (int i = 0; i < flickers; i++)
+        {
+            _light.enabled = !_light.enabled;
+            yield return new WaitForSeconds(speed);
+        }
+
+        _light.enabled = true;
     }
 }

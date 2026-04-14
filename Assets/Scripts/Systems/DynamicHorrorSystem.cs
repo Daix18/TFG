@@ -7,9 +7,9 @@ public class DynamicHorrorSystem : MonoBehaviour
     [Header("DHG Parameters")]
     [SerializeField] private float _evaluationInterval = 2f;
     [SerializeField] private float _cooldownDuration = 6f;
-    [SerializeField] private float _baseProbability = 0.1f;
-    [SerializeField] private float _growthFactor = 0.05f;
-    [SerializeField] private float _maxProbability = 0.6f;
+    [SerializeField] private float _baseProbability = 0.05f;
+    [SerializeField] private float _growthFactor = 0.08f;
+    [SerializeField] private float _maxProbability = 0.7f;
 
     //Internal state variables
     float _timeSinceLastEvent;
@@ -72,10 +72,11 @@ public class DynamicHorrorSystem : MonoBehaviour
                     float randomEvent = Random.value;
                     if (randomEvent < lightWeight)
                     {
-                        _lightEvent.TriggerLightEvent();
+                        float intensity = Mathf.Clamp01(_timeSinceLastEvent / 10f);
+                        _lightEvent.TriggerLightEvent(intensity);
                         _dataLogger.RegisterEvent("LIGHT_EVENT_DHG");
                     }
-                    else if (randomEvent < jumpscareWeight)
+                    else if (randomEvent < lightWeight * jumpscareWeight)
                     {
                         Debug.Log("Triggered jumpscare event...");
                         _jumpScareEvent.TriggerJumpScare();
@@ -84,7 +85,7 @@ public class DynamicHorrorSystem : MonoBehaviour
                     else
                     {
                         string soundName = AudioManager.THIS.PlayRandomSound();
-                        _dataLogger.RegisterEvent("SOUND_" + soundName);
+                        _dataLogger.RegisterEvent("SOUND_EVENT_DHG_" + soundName);
                     }
                     _isInCooldown = true;
                     _timeSinceLastEvent = 0f;

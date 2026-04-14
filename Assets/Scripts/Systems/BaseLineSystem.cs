@@ -31,7 +31,7 @@ public class BaseLineSystem : MonoBehaviour
 
     void TriggerEvent()
     {
-        _lightEvent.TriggerLightEvent();
-        _dataLogger.RegisterEvent("BASELINE_EVENT");
+        _lightEvent.TriggerLightEvent(0.2f);
+        _dataLogger.RegisterEvent("LIGHT_EVENT_BASELINE");
     }
 }

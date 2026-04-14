@@ -63,9 +63,16 @@ public class AffectiveLoopSystem : MonoBehaviour
 
         float movement = rawMovement * 5f;
 
-        movement = Mathf.Clamp01(movement);
 
-        _arousal += movement * _arousalIncrease * Time.deltaTime;
+        if (movement < 0.05f)
+            movement = 0f;
+
+        movement = Mathf.Pow(movement, 2f);
+
+        float increase = movement * _arousalIncrease * Time.deltaTime;
+        increase = Mathf.Min(increase, 0.03f);
+
+        _arousal += increase;
         _arousal -= _arousalDecay * Time.deltaTime;
 
         _arousal = Mathf.Clamp(_arousal, 0f, _maxArousal);
@@ -109,6 +116,8 @@ public class AffectiveLoopSystem : MonoBehaviour
                 _isInCooldown = true;
             }
         }
+
+        _dataLogger.RegisterEvent("AFFECTIVE_EVENT | Arousal: " + _arousal + " | Prob: " + _baseProbability);
     }
 
     void TriggerEvent()
@@ -117,21 +126,22 @@ public class AffectiveLoopSystem : MonoBehaviour
         {
             // sonido suave
             string sound = AudioManager.THIS.PlayRandomSound();
-            _dataLogger.RegisterEvent("AFFECTIVE_SOUND_" + sound);
+            _dataLogger.RegisterEvent("LOW_LIGHT_EVENT_AFFECTIVE");
+            _lightEvent.TriggerLightEvent(0.2f);
         }
         else if (_arousal < 0.7f)
         {
             // evento medio
-            _lightEvent.TriggerLightEvent();
-            _dataLogger.RegisterEvent("AFFECTIVE_LIGHT");
+            _lightEvent.TriggerLightEvent(0.5f);
+            _dataLogger.RegisterEvent("MEDIUM_LIGHT_EVENT_AFFECTIVE");
         }
         else
         {
-            _lightEvent.TriggerLightEvent();
+            _lightEvent.TriggerLightEvent(1f);
 
             string sound = AudioManager.THIS.PlayRandomSound();
 
-            _dataLogger.RegisterEvent("AFFECTIVE_STRONG_" + sound);
+            _dataLogger.RegisterEvent("STRONG_LIGHT_EVENT_AFFECTIVE");
         }
     }
 }
