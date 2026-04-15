@@ -13,7 +13,7 @@ public class BaseLineSystem : MonoBehaviour
 
         if (controller.SelectedTechnique != Technique.Baseline)
         {
-            enabled = false;
+            gameObject.SetActive(false);
         }
     }
 

@@ -63,7 +63,7 @@ public class AudioManager : MonoBehaviour
             newSource.clip = _sonidos[i].audioClip;
             newSource.volume = _sonidos[i].volume;
             newSource.loop = _sonidos[i].loop;
-            newSource.spatialBlend = 1f;
+            newSource.spatialBlend = 0f;
             _soundSource[i] = newSource;
         }
     }

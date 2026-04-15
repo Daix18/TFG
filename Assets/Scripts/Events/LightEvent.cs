@@ -11,7 +11,6 @@ public class LightEvent : MonoBehaviour
         var controller = FindAnyObjectByType<TechniqueManager>();
         if (controller.SelectedTechnique != Technique.Baseline)
         {
-            enabled = false;
             GetComponent<BoxCollider>().enabled = false;
         }
     }
@@ -20,6 +19,8 @@ public class LightEvent : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            if (!hasTriggered) return;
+
             StartCoroutine(Flicker(0.5f));
         }
     }
@@ -41,5 +42,8 @@ public class LightEvent : MonoBehaviour
         }
 
         _light.enabled = true;
+        yield return new WaitForSeconds(1f);
+
+        hasTriggered = false;
     }
 }
