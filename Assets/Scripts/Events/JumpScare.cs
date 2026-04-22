@@ -23,14 +23,24 @@ public class JumpScare : MonoBehaviour
 
     IEnumerator ZombieJumpScare()
     {
-        Vector3 spawnPosition = _playerCamera.position + _playerCamera.forward * _distanceToPlayer + Vector3.up;
-        spawnPosition.y += heightOffset;
-        GameObject instance = Instantiate(_zombie,spawnPosition, Quaternion.identity);
-        Vector3 target = _playerCamera.position;
-        target.y = instance.transform.position.y;
+        GameObject instance = Instantiate(_zombie);
         AudioManager.THIS.PlaySound("JUMPSCARE");
-        instance.transform.LookAt(target);
-        yield return new WaitForSeconds(1f);
+        float duration = 1f;
+        float timer = 0f;
+        while (timer < duration)
+        {
+            Vector3 spawnPosition = _playerCamera.position + _playerCamera.forward * _distanceToPlayer + Vector3.up;
+            spawnPosition.y += heightOffset;
+
+            instance.transform.position = spawnPosition;
+
+            Vector3 target = _playerCamera.position;
+            target.y = instance.transform.position.y;
+
+            instance.transform.LookAt(target);
+            timer += Time.deltaTime;
+            yield return null;
+        }
         Destroy(instance);
     }
 }

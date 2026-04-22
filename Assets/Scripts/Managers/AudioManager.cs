@@ -19,6 +19,8 @@ public class AudioManager : MonoBehaviour
     private GameObject _soundManager;
     private AudioSource[] _soundSource;
 
+    bool _isPlaying;
+
     private void Awake()
     {
         if (THIS == null)
@@ -42,11 +44,15 @@ public class AudioManager : MonoBehaviour
 
     public string PlaySound(string soundName)
     {
+        if (_isPlaying) return null;
+
         for (int i = 0; i < _sonidos.Length; i++)
         {
             if (_sonidos[i].name == soundName)
             {
                 _soundSource[i].Play();
+                _isPlaying = true;
+                StartCoroutine(ResetSound(_sonidos[i].audioClip.length));
                 return _sonidos[i].name;
             }
         }
@@ -66,5 +72,11 @@ public class AudioManager : MonoBehaviour
             newSource.spatialBlend = 0f;
             _soundSource[i] = newSource;
         }
+    }
+
+    IEnumerator ResetSound(float duration)
+    {
+        yield return new WaitForSeconds(duration);
+        _isPlaying = false;
     }
 }

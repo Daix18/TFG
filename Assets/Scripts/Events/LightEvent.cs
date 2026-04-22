@@ -19,7 +19,7 @@ public class LightEvent : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            if (!hasTriggered) return;
+            if (hasTriggered) return;
 
             StartCoroutine(Flicker(0.5f));
         }
@@ -32,6 +32,8 @@ public class LightEvent : MonoBehaviour
 
     IEnumerator Flicker(float intensity)
     {
+        hasTriggered = true;
+
         int flickers = Mathf.RoundToInt(Mathf.Lerp(2, 10, intensity));
         float speed = Mathf.Lerp(0.2f, 0.05f, intensity);
 

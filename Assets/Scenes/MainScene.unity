@@ -759,7 +759,7 @@ GameObject:
   m_Layer: 0
   m_Name: TriggerRoom3
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 2974397684917235467, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -3597,7 +3597,7 @@ GameObject:
   m_Layer: 0
   m_Name: TriggerRoom2
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 2974397684917235467, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -3649,7 +3649,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ad3568b6d0c40748bfcdc5f7b978e35, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _light: {fileID: 2054911238}
+  _light: {fileID: 385430794}
 --- !u!1001 &767802620
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6711,7 +6711,7 @@ GameObject:
   m_Layer: 0
   m_Name: TriggerRoom1
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 2974397684917235467, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -6742,7 +6742,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ad3568b6d0c40748bfcdc5f7b978e35, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _light: {fileID: 0}
+  _light: {fileID: 2054911238}
 --- !u!65 &1562218421
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -8777,6 +8777,10 @@ MonoBehaviour:
     audioClip: {fileID: 8300000, guid: 6b7080e9e0dfadd4194ea255a395002d, type: 3}
     volume: 1
     loop: 0
+  - name: JUMPSCARE
+    audioClip: {fileID: 8300000, guid: 3453ed77bb65bfd429fb2614fb4fd794, type: 3}
+    volume: 1
+    loop: 0
 --- !u!4 &2078027307
 Transform:
   m_ObjectHideFlags: 0
@@ -9381,9 +9385,9 @@ SceneRoots:
   - {fileID: 832575519}
   - {fileID: 8997996946204120670}
   - {fileID: 2054911239}
+  - {fileID: 385430795}
   - {fileID: 1371718026}
   - {fileID: 1776488550}
-  - {fileID: 385430795}
   - {fileID: 584935498}
   - {fileID: 676056216}
   - {fileID: 1806991462}
