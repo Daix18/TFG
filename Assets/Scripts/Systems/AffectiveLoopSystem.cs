@@ -1,4 +1,8 @@
-﻿using UnityEngine;
+﻿// Autor: Daniel Izaguirre Montalvo
+// TFG - Generación Dinámica de Horror en Unity
+// Grado en Diseño y Desarrollo de Videojuegos y Entornos Virtuales - UDIT 2025/2026
+
+using UnityEngine;
 using UnityEngine.Rendering;
 
 public class AffectiveLoopSystem : MonoBehaviour
@@ -17,7 +21,7 @@ public class AffectiveLoopSystem : MonoBehaviour
     [SerializeField] float _cooldownDuration = 5f;
     [SerializeField] float _warmupDuration = 2f;
 
-    float _arousal;
+    [HideInInspector] public float _arousal;
     float _evaluationTimer;
     float _cooldownTimer;
     float warmupTimer;
@@ -33,7 +37,6 @@ public class AffectiveLoopSystem : MonoBehaviour
     CharacterController _characterController;
 
     //Jumpscare variables
-    [SerializeField] LightEvent _lightEvent;
     [SerializeField] JumpScare _jumpscareEvent;
 
     void Start()
@@ -94,8 +97,6 @@ public class AffectiveLoopSystem : MonoBehaviour
 
         _lastX = currentX;
         _lastY = currentY;
-
-        Debug.Log("Movement: " + movement + " | Speed: " + _playerSpeed + " | Arousal: " + _arousal);
     }
 
     void HandleCooldown()
@@ -132,8 +133,6 @@ public class AffectiveLoopSystem : MonoBehaviour
                 _isInCooldown = true;
             }
         }
-
-        _dataLogger.RegisterEvent("AFFECTIVE_EVENT | Arousal: " + _arousal + " | Prob: " + prob);
     }
 
     void TriggerEvent()
@@ -143,13 +142,15 @@ public class AffectiveLoopSystem : MonoBehaviour
             // sonido suave
             string sound = AudioManager.THIS.PlayRandomSound();
             _dataLogger.RegisterEvent("LOW_LIGHT_EVENT_AFFECTIVE");
-            _lightEvent.TriggerLightEvent(0.2f);
+            LightManager.THIS.TriggerClosestLight(0.2f);
+            Debug.Log("Triggered Low Light Affective Event");
         }
         else if (_arousal < 0.7f)
         {
             // evento medio
-            _lightEvent.TriggerLightEvent(0.5f);
+            LightManager.THIS.TriggerClosestLight(0.5f);
             _dataLogger.RegisterEvent("MEDIUM_LIGHT_EVENT_AFFECTIVE");
+            Debug.Log("Triggered Medium Light Affective Event");
         }
         else
         {
@@ -166,7 +167,8 @@ public class AffectiveLoopSystem : MonoBehaviour
             else
             {
                 _dataLogger.RegisterEvent("STRONG_LIGHT_EVENT_AFFECTIVE");
-                _lightEvent.TriggerLightEvent(1f);
+                LightManager.THIS.TriggerClosestLight(1f);
+                Debug.Log("Triggered Strong Light Affective Event");
             }
         }
     }

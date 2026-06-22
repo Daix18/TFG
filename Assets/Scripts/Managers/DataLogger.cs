@@ -1,3 +1,7 @@
+// Autor: Daniel Izaguirre Montalvo
+// TFG - Generación Dinámica de Horror en Unity
+// Grado en Diseño y Desarrollo de Videojuegos y Entornos Virtuales - UDIT 2025/2026
+
 using StarterAssets;
 using System;
 using System.IO;
@@ -11,6 +15,7 @@ public struct LogEntry
     public float CameraRotationY;
     public float DeltaCameraX;
     public float DeltaCameraY;
+    public float Arousal;
     public string EventType;
     public string Technique;
 }
@@ -29,6 +34,8 @@ public class DataLogger : MonoBehaviour
     float previousCameraRotationX;
     float previousCameraRotationY;
 
+    AffectiveLoopSystem _affectiveLoopSystem;
+
     //Variable Logger
     List<LogEntry> logEntries = new List<LogEntry>();
 
@@ -39,6 +46,7 @@ public class DataLogger : MonoBehaviour
     {
         var manager = FindFirstObjectByType<TechniqueManager>();
         _currentTechnique = manager.SelectedTechnique;
+        _affectiveLoopSystem = FindFirstObjectByType<AffectiveLoopSystem>();
         previousCameraRotationX = playerCameraRotationX.transform.eulerAngles.y;
         previousCameraRotationY = playerCameraRotationX.transform.eulerAngles.x;
     }
@@ -51,17 +59,18 @@ public class DataLogger : MonoBehaviour
 
         if (timer >= sampleInterval)
         {
-            logEntries.Add(CreateLogEntry("NONE"));
+            logEntries.Add(CreateLogEntry("STATE"));
             timer -= sampleInterval;
         }
 
     }
 
-    void SaveToCSV()
+    public void SaveToCSV()
     {
-        string csv = "Time;CameraRotationX;CameraRotationY;DeltaCameraX;DeltaCameraY;EventType;Technique\n";
+        string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
+        string csv = "Time;CameraRotationX;CameraRotationY;DeltaCameraX;DeltaCameraY;Arousal;EventType;Technique\n";
         string fileName = _currentTechnique.ToString() + "_" + DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss") + ".csv";
-        string filePath = Application.persistentDataPath + "/" + fileName;
+        string filePath = desktopPath + "/" + fileName;
         //Write to CSV string
         foreach (LogEntry outputentry in logEntries)
         {
@@ -69,7 +78,8 @@ public class DataLogger : MonoBehaviour
                 outputentry.CameraRotationX + ";" + 
                 outputentry.CameraRotationY + ";" +
                 outputentry.DeltaCameraX + ";" +
-                outputentry.DeltaCameraY + ";" + 
+                outputentry.DeltaCameraY + ";" +
+                outputentry.Arousal + ";" +
                 outputentry.EventType + ";" +
                 outputentry.Technique + "\n";
         }
@@ -88,6 +98,7 @@ public class DataLogger : MonoBehaviour
         entry.CameraRotationY = CameraRotationY;
         entry.DeltaCameraX = Mathf.DeltaAngle(previousCameraRotationX, CameraRotationX);
         entry.DeltaCameraY = Mathf.DeltaAngle(previousCameraRotationY, CameraRotationY);
+        entry.Arousal = _affectiveLoopSystem._arousal;
         entry.EventType = eventName;
         entry.Technique = _currentTechnique.ToString();
 
@@ -102,7 +113,7 @@ public class DataLogger : MonoBehaviour
         logEntries.Add(CreateLogEntry(eventName));
     }
 
-    private void OnApplicationQuit()
+    private void OnDisable()
     {
         SaveToCSV();
     }

@@ -1,3 +1,7 @@
+// Autor: Daniel Izaguirre Montalvo
+// TFG - Generación Dinámica de Horror en Unity
+// Grado en Diseño y Desarrollo de Videojuegos y Entornos Virtuales - UDIT 2025/2026
+
 using UnityEngine;
 
 public class BaseLineSystem : MonoBehaviour
@@ -13,7 +17,7 @@ public class BaseLineSystem : MonoBehaviour
 
         if (controller.SelectedTechnique != Technique.Baseline)
         {
-            gameObject.SetActive(false);
+            enabled = false;
         }
     }
 

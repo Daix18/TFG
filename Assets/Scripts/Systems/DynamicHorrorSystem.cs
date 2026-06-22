@@ -1,5 +1,9 @@
+// Autor: Daniel Izaguirre Montalvo
+// TFG - Generación Dinámica de Horror en Unity
+// Grado en Diseño y Desarrollo de Videojuegos y Entornos Virtuales - UDIT 2025/2026
 
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class DynamicHorrorSystem : MonoBehaviour
 {
@@ -19,7 +23,6 @@ public class DynamicHorrorSystem : MonoBehaviour
 
     //Horror events
     [Header("Horror Event References")]
-    [SerializeField] private LightEvent _lightEvent;
     [SerializeField] private JumpScare _jumpScareEvent;
 
     //DataLogger reference
@@ -73,10 +76,10 @@ public class DynamicHorrorSystem : MonoBehaviour
                     if (randomEvent < lightWeight)
                     {
                         float intensity = Mathf.Clamp01(_timeSinceLastEvent / 10f);
-                        _lightEvent.TriggerLightEvent(intensity);
+                        LightManager.THIS.TriggerClosestLight(intensity);
                         _dataLogger.RegisterEvent("LIGHT_EVENT_DHG");
                     }
-                    else if (randomEvent < lightWeight * jumpscareWeight)
+                    else if (randomEvent < lightWeight + jumpscareWeight)
                     {
                         Debug.Log("Triggered jumpscare event...");
                         _jumpScareEvent.TriggerJumpScare();

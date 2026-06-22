@@ -11,7 +11,9 @@ public class LightEvent : MonoBehaviour
         var controller = FindAnyObjectByType<TechniqueManager>();
         if (controller.SelectedTechnique != Technique.Baseline)
         {
-            GetComponent<BoxCollider>().enabled = false;
+            var collider = GetComponent<BoxCollider>();
+            if (collider != null)
+                collider.enabled = false;
         }
     }
 
