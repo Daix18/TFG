@@ -35,15 +35,16 @@ public class AffectiveLoopSystem : MonoBehaviour
     Transform _playerCamera;
     DataLogger _dataLogger;
     CharacterController _characterController;
+    CalibrationManager _calibrationManager;
 
     //Jumpscare variables
     [SerializeField] JumpScare _jumpscareEvent;
 
     void Start()
     {
-        _playerCamera = Camera.main.transform;
         _dataLogger = FindAnyObjectByType<DataLogger>();
         _characterController = FindAnyObjectByType<CharacterController>();
+        _calibrationManager = FindAnyObjectByType<CalibrationManager>();
 
         var controller = FindAnyObjectByType<TechniqueManager>();
 
@@ -66,8 +67,8 @@ public class AffectiveLoopSystem : MonoBehaviour
         velocity.y = 0f;
         _playerSpeed = velocity.magnitude;
 
-        float currentX = _playerCamera.eulerAngles.x;
-        float currentY = _playerCamera.eulerAngles.y;
+        float currentX = transform.eulerAngles.x;
+        float currentY = transform.eulerAngles.y;
 
         float deltaX = Mathf.DeltaAngle(_lastX, currentX);
         float deltaY = Mathf.DeltaAngle(_lastY, currentY);
@@ -79,15 +80,18 @@ public class AffectiveLoopSystem : MonoBehaviour
 
         if (movement < 0.05f)
             movement = 0f;
+
         if (_playerSpeed < 0.1f)
             _playerSpeed = 0f;
 
         float combined = movement + _playerSpeed * 0.1f;
         combined = Mathf.Clamp01(combined);
-
         combined = Mathf.Pow(combined, 1.5f);
 
-        float increase = movement * _arousalIncrease * Time.deltaTime;
+        float normalizeMovement = movement / _calibrationManager._baseSensitivity;
+        normalizeMovement = Mathf.Clamp01(normalizeMovement);
+
+        float increase = normalizeMovement * _arousalIncrease * Time.deltaTime;
         increase = Mathf.Min(increase, 0.03f);
 
         _arousal += increase;
