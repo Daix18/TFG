@@ -6,10 +6,13 @@ using TMPro;
 using StarterAssets;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Rendering;
 
 
 public class GameManager : MonoBehaviour
 {
+    public static GameManager THIS;
+
     [Header("Timer Settings")]
     [SerializeField] float duration = 180f; // 3 minutos
 
@@ -19,13 +22,16 @@ public class GameManager : MonoBehaviour
 
     [Header("UI")]
     [SerializeField] TextMeshProUGUI timerText;
+    [SerializeField] TextMeshProUGUI instructionsText;
     [SerializeField] GameObject startPanel;
     [SerializeField] GameObject endPanel;
+    [SerializeField] Button startButton;
 
     DataLogger _dataLogger;
+    CalibrationManager _calibrationManager;
+    FirstPersonController _firstPersonController;
 
     [SerializeField] StarterAssetsInputs _input;
-
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -33,13 +39,21 @@ public class GameManager : MonoBehaviour
         currentTime = duration;
         isRunning = false;
         _dataLogger = FindAnyObjectByType<DataLogger>();
+        _calibrationManager = FindAnyObjectByType<CalibrationManager>();
+        _firstPersonController = FindAnyObjectByType<FirstPersonController>();
         Time.timeScale = 0f; // pausa el juego al inicio
         _input.cursorLocked = false;
         _input.cursorInputForLook = false; 
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
         startPanel.SetActive(true);
+        startButton.onClick.AddListener(StartCalibration);
         endPanel.SetActive(false);
+    }
+
+    private void Awake()
+    {
+        THIS = this;
     }
 
     // Update is called once per frame
@@ -80,13 +94,55 @@ public class GameManager : MonoBehaviour
         _input.cursorInputForLook = true;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+        _dataLogger.isLogging = true;
+
+        _firstPersonController.MoveSpeed = 4f;
+        _firstPersonController.SprintSpeed = 6f;
+        _firstPersonController.enabled = true;
 
         StartTimer();
+    }
+
+    public void StartCalibration()
+    {
+        startPanel.SetActive(false);
+        timerText.gameObject.SetActive(true);
+        Time.timeScale = 1f;
+        _input.cursorLocked = true;
+        _input.cursorInputForLook = true;
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+        
+        _firstPersonController.MoveSpeed = 0f;
+        _firstPersonController.SprintSpeed = 0f;
+        _calibrationManager.StartCalibration();
+    }
+
+    public void CalibrationEnded()
+    {
+        startPanel.SetActive(true);
+        timerText.gameObject.SetActive(false);
+        Time.timeScale = 0f;
+        _input.cursorLocked = false;
+        _input.cursorInputForLook = false;
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+        endPanel.SetActive(false);
+        _firstPersonController.MoveSpeed = 0f;
+        _firstPersonController.SprintSpeed = 0f;
+        _firstPersonController.enabled = false;
     }
 
     public void CloseGame()
     {
         Application.Quit();
+    }
+
+    public void ShowInstructions()
+    {
+        instructionsText.SetText("Muevete libremente por el mapa.\n No te quedes quieto.\nEsta sesión dura 3 minutos.");
+        startButton.onClick.RemoveAllListeners();
+        startButton.onClick.AddListener(StartGame);
     }
 
     void EndGame()

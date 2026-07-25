@@ -26,6 +26,8 @@ public class DataLogger : MonoBehaviour
     [SerializeField] private float sampleInterval = 0.2f;
     float timer = 0f;
 
+    [HideInInspector] public bool isLogging;
+
     //Data variables
     float gameTime;
     public Transform playerCameraRotationX;
@@ -56,6 +58,8 @@ public class DataLogger : MonoBehaviour
     {
         timer += Time.deltaTime;
         gameTime += Time.deltaTime;
+
+        if (!isLogging) return;
 
         if (timer >= sampleInterval)
         {

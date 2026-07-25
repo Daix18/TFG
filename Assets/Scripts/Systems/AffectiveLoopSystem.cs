@@ -32,7 +32,6 @@ public class AffectiveLoopSystem : MonoBehaviour
     float _playerSpeed;
 
     // References 
-    Transform _playerCamera;
     DataLogger _dataLogger;
     CharacterController _characterController;
     CalibrationManager _calibrationManager;

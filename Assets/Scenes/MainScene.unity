@@ -3836,8 +3836,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   duration: 180
   timerText: {fileID: 732097332}
+  instructionsText: {fileID: 2018558087}
   startPanel: {fileID: 1694944872}
   endPanel: {fileID: 2040445777}
+  startButton: {fileID: 1023866684}
   _input: {fileID: 5420857362073079960}
 --- !u!1 &621698760
 GameObject:
@@ -6232,19 +6234,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1023866685}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 616787687}
-        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: StartGame
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &1023866685
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8760,6 +8750,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sampleInterval: 0.2
+  isLogging: 0
   playerCameraRotationX: {fileID: 8997996946204120670}
   playerCameraRotationY: {fileID: 4135013736829056440}
   _currentTechnique: 0
@@ -9167,6 +9158,52 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 849446831027330800, guid: f45e36ddd26690d4d9f843bf9a3e4887, type: 3}
   m_PrefabInstance: {fileID: 1575006271}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1589994822
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1589994823}
+  - component: {fileID: 1589994824}
+  m_Layer: 0
+  m_Name: CalibrationManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1589994823
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1589994822}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1806991462}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1589994824
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1589994822}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c73739c905f64849aaa155f644cb6d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _calibracionActive: 0
+  _baseSensitivity: 1
 --- !u!1001 &1642775398
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10293,6 +10330,7 @@ Transform:
   - {fileID: 616787686}
   - {fileID: 2078027307}
   - {fileID: 601803639}
+  - {fileID: 1589994823}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1810424866
@@ -11334,8 +11372,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Muevete libremente por el mapa.\nNo te quedes quieto.\nEsta sesi\xF3n
-    dura 3 minutos."
+  m_text: "Mueve el rat\xF3n libremente duarnte 5 segundos para calibrar"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -11369,7 +11406,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 1
+  m_HorizontalAlignment: 2
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0

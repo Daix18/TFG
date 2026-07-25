@@ -11,6 +11,7 @@ public class CalibrationManager : MonoBehaviour
     float _sumMovement;
     float _numofSamples;
 
+    Transform _playerCamera;
 
     private void Update()
     {
@@ -26,8 +27,19 @@ public class CalibrationManager : MonoBehaviour
 
         if (_calibrationTimer <= 0f)
         {
-            _calibracionActive = false;
-            _baseSensitivity = _numofSamples > 0 ? _sumMovement / _numofSamples : 1f;
+            if (_sumMovement < 0.5f)
+            {
+                StartCalibration();
+                Debug.Log("Calibration restarted due to insufficient movement.");
+            }
+            else
+            {
+                _calibracionActive = false;
+                _calibrationTimer = 5.0f;
+                _baseSensitivity = _sumMovement / _numofSamples;
+                GameManager.THIS.ShowInstructions();
+                GameManager.THIS.CalibrationEnded();
+            }
         }
     }
 
