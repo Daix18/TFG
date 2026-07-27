@@ -66,28 +66,17 @@ public class AffectiveLoopSystem : MonoBehaviour
         velocity.y = 0f;
         _playerSpeed = velocity.magnitude;
 
-        float currentX = transform.eulerAngles.x;
-        float currentY = transform.eulerAngles.y;
-
-        float deltaX = Mathf.DeltaAngle(_lastX, currentX);
-        float deltaY = Mathf.DeltaAngle(_lastY, currentY);
-
-        float rawMovement = Mathf.Sqrt(deltaX * deltaX + deltaY * deltaY) / Time.deltaTime;
-
-        float movement = rawMovement * 0.01f;
-        movement = Mathf.Clamp01(movement);
-
-        if (movement < 0.05f)
-            movement = 0f;
+        if (_calibrationManager._movement < 0.05f)
+            _calibrationManager._movement = 0f;
 
         if (_playerSpeed < 0.1f)
             _playerSpeed = 0f;
 
-        float combined = movement + _playerSpeed * 0.1f;
+        float combined = _calibrationManager._movement + _playerSpeed * 0.1f;
         combined = Mathf.Clamp01(combined);
         combined = Mathf.Pow(combined, 1.5f);
 
-        float normalizeMovement = movement / _calibrationManager._baseSensitivity;
+        float normalizeMovement = _calibrationManager._movement / _calibrationManager._baseSensitivity;
         normalizeMovement = Mathf.Clamp01(normalizeMovement);
 
         float increase = normalizeMovement * _arousalIncrease * Time.deltaTime;
@@ -97,9 +86,6 @@ public class AffectiveLoopSystem : MonoBehaviour
         _arousal -= _arousalDecay * Time.deltaTime;
 
         _arousal = Mathf.Clamp(_arousal, 0f, _maxArousal);
-
-        _lastX = currentX;
-        _lastY = currentY;
     }
 
     void HandleCooldown()

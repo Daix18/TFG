@@ -18,8 +18,8 @@ public class TechniqueManager : MonoBehaviour
 
     private void Awake()
     {
-        //int random = Random.Range(0, 3);
-        //_selectedTechinique = (Technique)random;
+        int random = Random.Range(0, 3);
+        _selectedTechinique = (Technique)random;
         Debug.Log("Selected Technique: " + _selectedTechinique);
     }
 }

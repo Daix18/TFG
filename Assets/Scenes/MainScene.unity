@@ -9204,6 +9204,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _calibracionActive: 0
   _baseSensitivity: 1
+  _movement: 0
+  _playerCamera: {fileID: 4135013736829056440}
 --- !u!1001 &1642775398
 PrefabInstance:
   m_ObjectHideFlags: 0
